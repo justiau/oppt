@@ -1,2 +1,2 @@
-ADD_TRANSITION_PLUGIN(dubinTransitionPlugin ${CMAKE_CURRENT_LIST_DIR}/TigerTransitionPlugin.cpp)
+ADD_TRANSITION_PLUGIN(tigerTransitionPlugin ${CMAKE_CURRENT_LIST_DIR}/TigerTransitionPlugin.cpp)
 
