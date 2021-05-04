@@ -1,6 +1,5 @@
 #include "oppt/plugin/Plugin.hpp"
 #include "oppt/opptCore/Distribution.hpp"
-// #include <iostream>
 
 namespace oppt
 {
@@ -14,17 +13,20 @@ public:
     virtual ~TigerTransitionPlugin() = default;
 
     virtual bool load(const std::string& optionsFile) override {
-        // std::cout<<*optionsFile;
-        debug::show_message("loading");
+        debug::show_message(optionsFile);
         return true;
     }
 
     virtual PropagationResultSharedPtr propagateState(const PropagationRequest* propagationRequest) const override {
         PropagationResultSharedPtr propagationResult(new PropagationResult());
         VectorFloat actionVec = propagationRequest->action->as<VectorAction>()->asVector();
-        // std::cout<<actionVec;
         debug::show_message("propagate state called");
         VectorFloat resultingState(propagationRequest->currentState->as<VectorState>()->asVector());
+        // setting state to terminal state
+        if (actionVec == 3.0) resultingState[0] = 3.0;
+        propagationResult->previousState = propagationRequest->currentState.get();
+        propagationResult->nextState =
+            std::make_shared<oppt::VectorState>(resultingState);
         return propagationResult;
     }
 
