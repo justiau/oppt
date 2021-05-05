@@ -28,10 +28,12 @@ public:
     virtual ~TigerRewardPlugin() = default;
 
     virtual bool load(const std::string& optionsFile) override {
+        debug::show_message("load called from reward plugin");
         return true;
     }
 
     virtual FloatType getReward(const PropagationResultSharedPtr& propagationResult) const override {
+        debug::show_message("getreward called from reward plugin");
         VectorFloat previousStateVector = propagationResult->previousState->as<VectorState>()->asVector();
         VectorFloat currentStateVector = propagationResult->nextState->as<VectorState>()->asVector();
         VectorFloat actionVec = propagationResult->action->as<VectorAction>()->asVector();

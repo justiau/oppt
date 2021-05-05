@@ -29,6 +29,7 @@ public :
     virtual ~TigerObservationPlugin() = default;
 
     virtual bool load(const std::string& optionsFile) override {
+        debug::show_message("load called from observation plugin");
         parseOptions_<TigerObservationPluginOptions>(optionsFile);
 
         // The observationError parameter acts as the efficiency distance here
@@ -38,22 +39,29 @@ public :
     }
 
     virtual ObservationResultSharedPtr getObservation(const ObservationRequest* observationRequest) const override {
+        debug::show_message("getobservation called from observation plugin");
         ObservationResultSharedPtr observationResult = std::make_shared<ObservationResult>();
 
         // Get the observation
         VectorFloat stateVec = observationRequest->currentState->as<VectorState>()->asVector();
         VectorFloat actionVec = observationRequest->action->as<VectorAction>()->asVector();
         VectorFloat observationVec(robotEnvironment_->getRobot()->getObservationSpace()->getNumDimensions(), 0.0);
-        if (actionVec[0] == 3.0) {
+        if (actionVec[0] < 2.25) {
+            observationVec[0] = 0.0;
+        } else {
             FloatType probability = 1.0 - observationError_;
             bool obsMatches =
                 std::bernoulli_distribution(
                     probability)(*(robotEnvironment_->getRobot()->getRandomEngine().get()));
-            int binNum;
-            tie(observationVec[0], binNum) = getObsFromState(stateVec[0], obsMatches);
+            int stateInt = (int) stateVec[0] + 0.25;
+            if (obsMatches) {
+                observationVec[0] = stateInt;
+            } else {
+                observationVec[0] = stateInt^1;
+            }
             auto observationSpace = robotEnvironment_->getRobot()->getObservationSpace();
             ObservationSharedPtr observation = std::make_shared<DiscreteVectorObservation>(observationVec);
-            observation->as<DiscreteVectorObservation>()->setBinNumber(binNum);
+            observation->as<DiscreteVectorObservation>()->setBinNumber((int) observationVec[0] + 0.25);
             observationResult->observation = observation;
             observationResult->errorVector = observationRequest->errorVector;
         }
@@ -62,21 +70,6 @@ public :
 
 private:
     FloatType observationError_;
-
-private:
-    std::tuple<std::string, int> getObsFromState(double state, bool isMatch) {
-        std::string dir = state.substr(state.find("-")+1);
-        std::string newDir;
-        if (isMatch) {
-            newDir = dir;
-        } else {
-            if (dir == "left") newDir = "right";
-            else newDir = "left";
-        }
-        int bin = (newDir == "left") ? 0 : 1;
-        return std::make_tuple("sound-" + newDir, bin);
-    }
-
 };
 
 OPPT_REGISTER_OBSERVATION_PLUGIN(TigerObservationPlugin)

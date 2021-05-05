@@ -26,7 +26,9 @@ public:
 
     virtual ~TigerInitialBeliefOptions() = default;
     
-    VectorFloat initialStateVec;
+    VectorFloat upperBound;
+
+    VectorFloat lowerBound;
 
     static std::unique_ptr<options::OptionParser> makeParser() {
         std::unique_ptr<options::OptionParser> parser =
@@ -35,10 +37,13 @@ public:
         return std::move(parser);
     }
 
-    static void addDefaultInitialBeliefOptions(options::OptionParser* parser) {        
+    static void addDefaultInitialBeliefOptions(options::OptionParser* parser) {
         parser->addOption<VectorFloat>("initialBeliefOptions",
-                                       "initialState",
-                                       &TigerInitialBeliefOptions::initialStateVec);	
+                                       "lowerBound",
+                                       &TigerInitialBeliefOptions::lowerBound);
+	    parser->addOption<VectorFloat>("initialBeliefOptions",
+                                       "upperBound",
+                                       &TigerInitialBeliefOptions::upperBound);
     }
 
 };
