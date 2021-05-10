@@ -27,12 +27,10 @@ public:
     virtual ~TigerTerminalPlugin() = default;
 
     virtual bool load(const std::string& optionsFile) override {
-        debug::show_message("load called from terminal plugin");
         return true;
     }
 
     virtual ValidityReportSharedPtr isValid(const PropagationResultSharedPtr& propagationResult) override {
-        debug::show_message("isvalid called from terminal plugin");
         ValidityReportSharedPtr vr(new ValidityReport(propagationResult->nextState));        
         VectorFloat stateVec = propagationResult->nextState->as<VectorState>()->asVector();
         vr->isValid = true;
@@ -40,17 +38,13 @@ public:
     }
 
     virtual bool isTerminal(const PropagationResultSharedPtr& propagationResult) override {
-        debug::show_message("isterminal called from observation plugin");
         if (!isValid(propagationResult)->isValid) {
-            debug::show_message("1");
-            return true;        
+            return true;
         }
         VectorFloat stateVec = propagationResult->nextState->as<VectorState>()->asVector();
         if (stateVec[0] > 2) {
-            debug::show_message("2");
             return true;
         }
-        debug::show_message("3");
         return false;
     }
     

@@ -30,7 +30,6 @@ public:
     virtual ~TigerInitialBeliefPlugin() = default;
 
     virtual bool load(const std::string& optionsFile) override {
-        debug::show_message("load called from belief plugin");
         parseOptions_<TigerInitialBeliefOptions>(optionsFile);
         auto options = static_cast<TigerInitialBeliefOptions*>(options_.get());
         unsigned int numDimensions = robotEnvironment_->getRobot()->getStateSpace()->getNumDimensions();
@@ -49,7 +48,6 @@ public:
     }
 
     virtual RobotStateSharedPtr sampleAnInitState() override {
-        debug::show_message("sample state called from belief plugin");
         VectorFloat initStateVec = toStdVec<FloatType>(uniformDistribution_->sample(1).col(0));
         unsigned int stateDimension = robotEnvironment_->getRobot()->getStateSpace()->getNumDimensions();
         if (initStateVec.size() != stateDimension)
