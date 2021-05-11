@@ -41,23 +41,20 @@ public:
             if (options->lowerBound[i] > options->upperBound[i])
                 ERROR("Lower bound for initial belief must be smaller than upper bound");
         }
-        uniformDistribution_((int) options->lowerBound[0] + 0.25, (int) options->upperBound[0] + 0.25);
         return true;
     }
 
     virtual RobotStateSharedPtr sampleAnInitState() override {
+        auto options = static_cast<TigerInitialBeliefOptions*>(options_.get());
+        std::uniform_int_distribution<unsigned int> dist(options->lowerBound[0],options->upperBound[0]);
         auto randomGenerator = robotEnvironment_->getRobot()->getRandomEngine();
-        VectorFloat initStateVec = VectorFloat ((FloatType) uniformDistribution_(*(randomGenerator.get())));
-        debug::show_message("initial state: " + debug::to_string(initStateVec[0]));
+        VectorFloat initStateVec = VectorFloat({dist(*(randomGenerator.get()))});
         unsigned int stateDimension = robotEnvironment_->getRobot()->getStateSpace()->getNumDimensions();
         if (initStateVec.size() != stateDimension)
             ERROR("Init state size doesnt fit");
         RobotStateSharedPtr initState(new VectorState(initStateVec));
         return initState;
     }
-
-private:
-    std::uniform_int_distribution<unsigned int> uniformDistribution_;
 };
 
 OPPT_REGISTER_INITIAL_BELIEF_PLUGIN(TigerInitialBeliefPlugin)
