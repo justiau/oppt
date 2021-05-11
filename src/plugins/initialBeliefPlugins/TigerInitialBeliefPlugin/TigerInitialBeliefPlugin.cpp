@@ -24,7 +24,7 @@ class TigerInitialBeliefPlugin: public InitialBeliefPlugin
 {
 public:
     TigerInitialBeliefPlugin():
-        InitialBeliefPlugin() {
+        InitialBeliefPlugin(){
     }
 
     virtual ~TigerInitialBeliefPlugin() = default;
@@ -41,14 +41,14 @@ public:
             if (options->lowerBound[i] > options->upperBound[i])
                 ERROR("Lower bound for initial belief must be smaller than upper bound");
         }
-        auto randomEngine = robotEnvironment_->getRobot()->getRandomEngine();
-        uniformDistribution_ =
-            std::make_unique<UniformDistribution<FloatType>>(options->lowerBound, options->upperBound, randomEngine);
+        uniformDistribution_((int) options->lowerBound[0] + 0.25, (int) options->upperBound[0] + 0.25);
         return true;
     }
 
     virtual RobotStateSharedPtr sampleAnInitState() override {
-        VectorFloat initStateVec = toStdVec<FloatType>(uniformDistribution_->sample(1).col(0));
+        auto randomGenerator = robotEnvironment_->getRobot()->getRandomEngine();
+        VectorFloat initStateVec = VectorFloat ((FloatType) uniformDistribution_(*(randomGenerator.get())));
+        debug::show_message("initial state: " + debug::to_string(initStateVec[0]));
         unsigned int stateDimension = robotEnvironment_->getRobot()->getStateSpace()->getNumDimensions();
         if (initStateVec.size() != stateDimension)
             ERROR("Init state size doesnt fit");
@@ -57,9 +57,7 @@ public:
     }
 
 private:
-    VectorFloat initialStateVec_;
-
-    std::unique_ptr<Distribution<FloatType>> uniformDistribution_;
+    std::uniform_int_distribution<unsigned int> uniformDistribution_;
 };
 
 OPPT_REGISTER_INITIAL_BELIEF_PLUGIN(TigerInitialBeliefPlugin)

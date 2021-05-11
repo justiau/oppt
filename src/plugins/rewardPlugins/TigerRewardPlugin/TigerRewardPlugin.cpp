@@ -36,20 +36,15 @@ public:
         VectorFloat currentStateVector = propagationResult->nextState->as<VectorState>()->asVector();
         VectorFloat actionVec = propagationResult->action->as<VectorAction>()->asVector();
 
-        // If we moved out of the right side of the map, return reward 10
-        // if (currentStateVector[0] > 7.5) {
-        //     return 10.0;
-        // } else if (currentStateVector[0] < 0.5 || currentStateVector[0] > 8.5 || currentStateVector[1] < 0.5 || currentStateVector[1] > 7.5) {
-        //     // Illegal move => return penalty
-        //     return -10.0;
-        // }
-
-        // switch ((unsigned int)(actionVec[0] + 0.25)) {
-        // case 5: return sampleRockAtCurrentLocation(previousStateVector, currentStateVector, actionVec);
-        //     break;
-        // default: return 0.0;
-        //     break;
-        // }
+        if (actionVec[0] < 2.25) {
+            if ((int) actionVec[0] + 0.25 == (int) previousStateVector[0] + 0.25) {
+                // opened same door as tiger
+                return -100.0;
+            } else {
+                // opened different door
+                return 10.0;
+            }
+        }
         return -1.0;
     }
 

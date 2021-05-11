@@ -20,7 +20,7 @@ public:
         PropagationResultSharedPtr propagationResult(new PropagationResult());
         VectorFloat actionVec = propagationRequest->action->as<VectorAction>()->asVector();
         VectorFloat resultingState(propagationRequest->currentState->as<VectorState>()->asVector());
-        if (actionVec[0] < 3) resultingState[0] = 3.0;
+        if (actionVec[0] < 2.25) resultingState[0] = 3.0;
         propagationResult->previousState = propagationRequest->currentState.get();
         propagationResult->nextState =
             std::make_shared<oppt::VectorState>(resultingState);

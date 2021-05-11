@@ -26,7 +26,6 @@ class RocksampleInitialBeliefPlugin: public InitialBeliefPlugin
 public:
     RocksampleInitialBeliefPlugin():
         InitialBeliefPlugin() {
-
     }
 
     virtual ~RocksampleInitialBeliefPlugin() = default;
