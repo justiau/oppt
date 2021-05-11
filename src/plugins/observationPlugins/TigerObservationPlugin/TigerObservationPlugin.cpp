@@ -63,7 +63,6 @@ public :
         }
         auto observationSpace = robotEnvironment_->getRobot()->getObservationSpace();
         ObservationSharedPtr observation = std::make_shared<DiscreteVectorObservation>(observationVec);
-        // debug::show_message("setting bin number to " + debug::to_string(binNumber));
         observation->as<DiscreteVectorObservation>()->setBinNumber(binNumber);
         observationResult->observation = observation;
         observationResult->errorVector = observationRequest->errorVector;

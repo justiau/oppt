@@ -42,7 +42,7 @@ public:
             return true;
         }
         VectorFloat stateVec = propagationResult->nextState->as<VectorState>()->asVector();
-        if (stateVec[0] > 2) {
+        if (stateVec[0] == 3.0) {
             return true;
         }
         return false;

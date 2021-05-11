@@ -35,21 +35,21 @@ public:
         VectorFloat previousStateVector = propagationResult->previousState->as<VectorState>()->asVector();
         VectorFloat currentStateVector = propagationResult->nextState->as<VectorState>()->asVector();
         VectorFloat actionVec = propagationResult->action->as<VectorAction>()->asVector();
-
         if (actionVec[0] < 2.25) {
             if ((int) actionVec[0] + 0.25 == (int) previousStateVector[0] + 0.25) {
-                // opened same door as tiger
+                // opened tiger door
                 return -100.0;
             } else {
                 // opened different door
                 return 10.0;
             }
         }
+        // agent chose to listen
         return -1.0;
     }
 
     virtual std::pair<FloatType, FloatType> getMinMaxReward() const override {
-        return std::make_pair(-10.0, 10.0);
+        return std::make_pair(-100.0, 10.0);
     }
 
 };

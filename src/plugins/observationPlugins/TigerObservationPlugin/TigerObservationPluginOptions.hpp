@@ -32,7 +32,14 @@ public:
     static std::unique_ptr<options::OptionParser> makeParser() {
         std::unique_ptr<options::OptionParser> parser =
             PluginOptions::makeParser();
+        addGazeboObservationPluginOptions(parser.get());
         return std::move(parser);
+    }
+
+    static void addGazeboObservationPluginOptions(options::OptionParser* parser) {
+        parser->addOption<FloatType>("observationPluginOptions",
+                                     "observationError",
+                                     &TigerObservationPluginOptions::observationError);
     }
 
 };
