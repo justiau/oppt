@@ -1,0 +1,1 @@
+ADD_TERMINAL_PLUGIN(pomdpxTerminalPlugin ${CMAKE_CURRENT_LIST_DIR}/PomdpxTerminalPlugin.cpp)

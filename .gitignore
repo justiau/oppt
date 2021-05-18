@@ -4,6 +4,9 @@
 /.settings
 /EMPTY_HEADER.hpp
 
+# VSCode settings
+/.vscode
+
 # Local configuration settings
 /*local.make
 

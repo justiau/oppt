@@ -1,0 +1,2 @@
+ADD_TRANSITION_PLUGIN(pomdpxTransitionPlugin ${CMAKE_CURRENT_LIST_DIR}/PomdpxTransitionPlugin.cpp)
+

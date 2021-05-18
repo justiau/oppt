@@ -1,0 +1,1 @@
+ADD_INITIAL_BELIEF_PLUGIN(pomdpxInitialBeliefPlugin ${CMAKE_CURRENT_LIST_DIR}/PomdpxInitialBeliefPlugin.cpp)

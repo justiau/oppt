@@ -1,0 +1,1 @@
+ADD_OBSERVATION_PLUGIN(pomdpxObservationPlugin ${CMAKE_CURRENT_LIST_DIR}/PomdpxObservationPlugin.cpp)
